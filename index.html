@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سمو جروب | متابعة المشاريع</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B2147; --navy2:#16346B; --navy3:#1d4488; --line:#2a4a85;
+  --gold:#E0A800; --gold2:#C99700; --ink:#E8EDF7; --mute:#9FB1D3;
+  --y:#FFE680; --o:#F8B26A; --b:#B7E1F7; --g:#D9D9D9; --r:#F4B0B0;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--navy);color:var(--ink);font-family:'Cairo',Tahoma,Arial,sans-serif;font-size:15px}
+a{color:var(--gold)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 18px 60px}
+header{background:linear-gradient(180deg,#081a3a,var(--navy));border-bottom:3px solid var(--gold);padding:18px 0 16px}
+header .wrap{padding-bottom:0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}
+.mark{width:54px;height:54px;border-radius:14px;background:var(--navy2);border:2px solid var(--gold);display:grid;place-items:center;color:var(--gold);font-weight:800;font-size:20px;letter-spacing:1px}
+.brand h1{margin:0;color:var(--gold);font-size:26px;font-weight:800;line-height:1.1}
+.brand p{margin:2px 0 0;color:var(--mute);font-size:13px}
+.meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--mute);font-size:13px}
+.btn{background:var(--navy2);color:var(--gold);border:1px solid var(--gold2);border-radius:10px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--gold);color:var(--navy)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.dot{width:9px;height:9px;border-radius:50%;background:#5ad27b;display:inline-block;margin-left:6px}
+.dot.load{background:var(--gold);animation:p 1s infinite}
+@keyframes p{50%{opacity:.3}}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 0}
+nav button{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 18px;font:inherit;font-weight:600;cursor:pointer}
+nav button.on{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:800}
+nav button .n{opacity:.75;font-weight:600;margin-right:6px;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+.kpi{border-radius:16px;padding:14px 16px;cursor:pointer;border:1px solid transparent;transition:.15s;color:var(--navy)}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.kpi .l{font-weight:700;font-size:13px}
+.kpi .v{font-size:36px;font-weight:800;line-height:1.1;margin-top:2px}
+.kpi.total{background:var(--navy2);border-color:var(--gold);color:var(--gold)}
+.kpi.o{background:var(--o)} .kpi.y{background:var(--y)} .kpi.b{background:var(--b)} .kpi.g{background:var(--g)}
+.kpi.late{background:#fbd5d5;color:#a11616} .kpi.r{background:var(--r);color:#6e1b1b}
+.kpi .s{font-size:11px;opacity:.8;margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--navy2);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.card h3{margin:0 0 12px;color:var(--gold);font-size:17px;font-weight:800}
+.card h3 small{color:var(--mute);font-weight:600;font-size:12px;margin-right:8px}
+.bar{display:flex;height:22px;border-radius:7px;overflow:hidden;background:#0d2859}
+.bar i{display:block;height:100%;min-width:0}
+.repRow{display:grid;grid-template-columns:110px 1fr 40px;gap:10px;align-items:center;padding:6px 0;cursor:pointer;border-radius:8px}
+.repRow:hover{background:rgba(255,255,255,.05)}
+.repRow b{color:var(--ink);font-weight:700}
+.repRow span.t{color:var(--gold);font-weight:800;text-align:left}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;color:var(--mute);font-size:12px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-left:5px;vertical-align:-1px}
+.chip{display:inline-block;background:#0d2859;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:2px 10px;font-size:12px;margin:2px 0 2px 4px;white-space:nowrap}
+.chip b{color:var(--gold)}
+.pill{display:inline-block;border-radius:999px;padding:2px 11px;font-size:12px;font-weight:800;color:var(--navy);white-space:nowrap}
+.pill.o{background:var(--o)} .pill.y{background:var(--y)} .pill.b{background:var(--b)} .pill.g{background:var(--g)} .pill.r{background:var(--r)}
+.late{color:#ff8f8f;font-weight:800} .ok{color:#8be0a4} .warn{color:var(--gold)}
+.list .it{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.list .it:last-child{border:0}
+.list .it:hover{background:rgba(255,255,255,.04)}
+.list .nm{font-weight:700}
+.badge{background:var(--gold);color:var(--navy);border-radius:9px;padding:2px 9px;font-weight:800;font-size:13px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:4px 0 14px}
+.toolbar input,.toolbar select{background:#0d2859;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;min-width:140px}
+.toolbar input[type=search]{flex:1;min-width:220px}
+.toolbar label{color:var(--mute);font-size:13px;display:flex;align-items:center;gap:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:2px solid transparent;border-radius:999px;padding:5px 13px;font:inherit;font-weight:800;cursor:pointer;color:var(--navy);opacity:.55}
+.chips button.on{opacity:1;border-color:#fff}
+.chips .o{background:var(--o)} .chips .y{background:var(--y)} .chips .b{background:var(--b)} .chips .g{background:var(--g)} .chips .r{background:var(--r)}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--navy2);max-height:72vh}
+table{border-collapse:collapse;width:100%;min-width:980px}
+th{position:sticky;top:0;background:var(--navy);color:var(--gold);text-align:right;padding:10px 12px;font-size:13px;border-bottom:2px solid var(--gold);cursor:pointer;white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+tr.row{cursor:pointer} tr.row:hover td{background:rgba(255,255,255,.06)}
+td:first-child{white-space:nowrap}
+td.n{max-width:300px;color:#cdd8ef;font-size:13px}
+.cnt{color:var(--mute);font-size:13px;margin:8px 2px}
+.gcard{background:var(--navy2);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.gh{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;flex-wrap:wrap}
+.gh:hover{background:rgba(255,255,255,.04)}
+.gh .nm{font-weight:800;font-size:16px;min-width:180px}
+.gh .repsb{flex:1}
+.gb{display:none;padding:0 14px 14px}
+.gcard.open .gb{display:block}
+.gcard.multi{border-color:var(--gold)}
+.mini{width:100%;min-width:0}
+.mini td,.mini th{font-size:13px;padding:7px 9px;position:static}
+.mini th{background:#0d2859}
+.modal{position:fixed;inset:0;background:rgba(3,10,25,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:9}
+.modal.show{display:flex}
+.sheet{background:var(--navy);border:2px solid var(--gold);border-radius:18px;max-width:720px;width:100%;max-height:88vh;overflow:auto;padding:20px 22px}
+.sheet h2{margin:0 0 4px;color:var(--gold)}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;margin-top:14px}
+.kv div:nth-child(odd){color:var(--mute)}
+.kv div:nth-child(even){word-break:break-word;white-space:pre-wrap}
+.empty{text-align:center;color:var(--mute);padding:40px}
+.err{background:#4a1a1a;border:1px solid #a33;color:#ffd0d0;border-radius:12px;padding:14px 18px;margin:20px 0}
+footer{color:var(--mute);font-size:12px;text-align:center;margin-top:30px}
+@media print{header nav,.toolbar,.btn{display:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <div class="mark">SMOU</div>
+      <div><h1>سمو جروب</h1><p>لوحة متابعة المشاريع — المبيعات</p></div>
+    </div>
+    <div class="meta">
+      <span><span class="dot load" id="dot"></span><span id="upd">جاري التحميل…</span></span>
+      <button class="btn sm" id="refresh">↻ تحديث الآن</button>
+    </div>
+  </div>
+  <nav id="nav"></nav>
+</div></header>
+<div class="wrap" id="app"><div class="empty">جاري تحميل البيانات من الشيت…</div></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+var ST=[
+ {k:'مهم جدا',label:'مهم جدًا',c:'o',col:'#F8B26A'},
+ {k:'متابعة',label:'متابعة',c:'y',col:'#FFE680'},
+ {k:'سماوي',label:'سماوي',c:'b',col:'#B7E1F7'},
+ {k:'غير معروف',label:'غير معروف',c:'g',col:'#D9D9D9'}
+];
+var RED={k:'احمر',label:'أحمر',c:'r',col:'#F4B0B0'};
+var norm=function(s){return String(s||'').replace(/[ً-ٟ]/g,'').replace(/[أإآ]/g,'ا').trim()};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var stInfo=function(s){var n=norm(s);for(var i=0;i<ST.length;i++)if(norm(ST[i].k)===n)return ST[i];return n==='احمر'?RED:{k:n,label:s||'—',c:'g',col:'#D9D9D9'}};
+var pill=function(s){var i=stInfo(s);return '<span class="pill '+i.c+'">'+esc(i.label)+'</span>'};
+
+var DATA={active:[],red:[]}, S={tab:'overview',q:'',rep:'',status:'',cons:'',cont:'',late:false,multi:false,sort:'date',dir:-1,gq:'',open:{}};
+var TODAY=new Date(); TODAY.setHours(0,0,0,0);
+
+function fstate(x){
+  if(norm(x.status)!=='متابعة') return '';
+  if(!x.followup) return 'بدون موعد';
+  var d=new Date(x.followup+'T00:00:00'); if(isNaN(d)) return 'بدون موعد';
+  return d<TODAY?'متأخرة':'في الموعد';
+}
+function prep(){
+  DATA.active.forEach(function(x){x.fs=fstate(x);x.hay=norm([x.client,x.consultant,x.contractor,x.phone,x.rep,x.note,x.eng,x.plot].join(' ')).replace(/\s+/g,' ').toLowerCase();x.red=false});
+  DATA.red.forEach(function(x){x.fs='';x.hay=norm([x.client,x.consultant,x.contractor,x.phone,x.rep,x.note,x.eng,x.plot].join(' ')).toLowerCase();x.red=true;x.status='أحمر'});
+}
+function reps(){var m={};DATA.active.forEach(function(x){if(x.rep)m[x.rep]=1});return Object.keys(m).sort()}
+function count(fn){return DATA.active.filter(fn).length}
+function byStatus(k){return DATA.active.filter(function(x){return norm(x.status)===norm(k)})}
+
+/* ---------- navigation ---------- */
+var TABS=[['overview','نظرة عامة'],['projects','المشاريع'],['cons','الاستشاريين'],['cont','المقاولين'],['reps','المناديب'],['red','الأحمر (مؤرشف)']];
+function renderNav(){
+  document.getElementById('nav').innerHTML=TABS.map(function(t){
+    var n=t[0]==='projects'?DATA.active.length:t[0]==='red'?DATA.red.length:'';
+    return '<button data-t="'+t[0]+'" class="'+(S.tab===t[0]?'on':'')+'">'+t[1]+(n!==''?'<span class="n">'+n+'</span>':'')+'</button>';
+  }).join('');
+}
+document.getElementById('nav').addEventListener('click',function(e){var b=e.target.closest('button');if(b){go(b.dataset.t)}});
+function go(t,patch){S.tab=t;if(patch)for(var k in patch)S[k]=patch[k];render();window.scrollTo(0,0)}
+
+/* ---------- overview ---------- */
+function kpi(cls,l,v,sub,action){return '<div class="kpi '+cls+'" data-a="'+action+'"><div class="l">'+l+'</div><div class="v">'+v+'</div>'+(sub?'<div class="s">'+sub+'</div>':'')+'</div>'}
+function viewOverview(){
+  var A=DATA.active, late=count(function(x){return x.fs==='متأخرة'});
+  var h='<div class="kpis">'+
+   kpi('total','إجمالي المشاريع النشطة',A.length,'بدون الأحمر','all')+
+   ST.map(function(s){return kpi(s.c,s.label,byStatus(s.k).length,'','st:'+s.k)}).join('')+
+   kpi('late','متابعات متأخرة',late,'موعدها فات','late')+
+   kpi('r','أحمر (مؤرشف)',DATA.red.length,'خارج الحساب','red')+'</div>';
+  // per rep
+  var R=reps(), max=0, per={};
+  R.forEach(function(r){per[r]=A.filter(function(x){return x.rep===r});max=Math.max(max,per[r].length)});
+  R.sort(function(a,b){return per[b].length-per[a].length});
+  var repHtml=R.map(function(r){
+    var segs=ST.map(function(s){var n=per[r].filter(function(x){return norm(x.status)===norm(s.k)}).length;return '<i title="'+s.label+': '+n+'" style="width:'+(n/max*100)+'%;background:'+s.col+'"></i>'}).join('');
+    return '<div class="repRow" data-rep="'+esc(r)+'"><b>'+esc(r)+'</b><div class="bar">'+segs+'</div><span class="t">'+per[r].length+'</span></div>';
+  }).join('');
+  var leg='<div class="legend">'+ST.map(function(s){return '<span><i style="background:'+s.col+'"></i>'+s.label+'</span>'}).join('')+'</div>';
+  // shared consultants/contractors
+  function shared(field,tab){
+    var g=group(field).filter(function(x){return x.reps.length>1}).slice(0,8);
+    if(!g.length)return '<div class="empty">لا يوجد</div>';
+    return '<div class="list">'+g.map(function(x){return '<div class="it" data-g="'+tab+'" data-n="'+esc(x.name)+'"><div><div class="nm">'+esc(x.name)+'</div><div>'+x.reps.map(function(r){return '<span class="chip">'+esc(r[0])+' <b>'+r[1]+'</b></span>'}).join('')+'</div></div><span class="badge">'+x.items.length+'</span></div>'}).join('')+'</div>';
+  }
+  var needs=[
+    ['غير معروف الحالة',byStatus('غير معروف').length,"go('projects',{status:'غير معروف'})"],
+    ['متابعات متأخرة',late,"go('projects',{status:'متابعة',late:true})"],
+    ['متابعة بدون موعد',count(function(x){return x.fs==='بدون موعد'}),"go('projects',{status:'متابعة'})"],
+    ['أسماء عملاء مكررة محتملة',count(function(x){return x.dup}),"go('projects',{q:''})"]
+  ].map(function(n){return '<div class="it" onclick="'+n[2]+'"><span class="nm">'+n[0]+'</span><span class="badge">'+n[1]+'</span></div>'}).join('');
+  var lateList=A.filter(function(x){return x.fs==='متأخرة'}).sort(function(a,b){return a.followup<b.followup?-1:1}).slice(0,6).map(function(x){
+    return '<div class="it" data-id="'+esc(x.id)+'"><div><div class="nm">'+esc(x.client||x.consultant||x.contractor)+'</div><div class="mute" style="color:var(--mute);font-size:12px">'+esc(x.rep)+' · '+esc(x.consultant||x.contractor||'')+'</div></div><span class="late">'+esc(x.followup)+'</span></div>'}).join('');
+  h+='<div class="grid2"><div class="card"><h3>المشاريع حسب المندوب <small>اضغط على مندوب لعرض مشاريعه</small></h3>'+repHtml+leg+'</div>'+
+     '<div class="card"><h3>تحتاج انتباه</h3><div class="list">'+needs+'</div>'+(lateList?'<h3 style="margin-top:16px">أقدم المتابعات المتأخرة</h3><div class="list">'+lateList+'</div>':'')+'</div>'+
+     '<div class="card"><h3>استشاريون مع أكثر من مندوب <small>أعلى 8</small></h3>'+shared('consultant','cons')+'</div>'+
+     '<div class="card"><h3>مقاولون مع أكثر من مندوب <small>أعلى 8</small></h3>'+shared('contractor','cont')+'</div></div>';
+  return h;
+}
+
+/* ---------- grouping ---------- */
+function group(field){
+  var m={};
+  DATA.active.forEach(function(x){var n=x[field];if(!n)return;(m[n]=m[n]||{name:n,items:[],rc:{},st:{}}).items.push(x);var g=m[n];g.rc[x.rep]=(g.rc[x.rep]||0)+1});
+  var arr=Object.keys(m).map(function(n){var g=m[n];g.reps=Object.keys(g.rc).map(function(r){return [r,g.rc[r]]}).sort(function(a,b){return b[1]-a[1]});return g});
+  arr.sort(function(a,b){return b.reps.length-a.reps.length||b.items.length-a.items.length||a.name.localeCompare(b.name,'ar')});
+  return arr;
+}
+function viewGroup(field,label){
+  var g=group(field), q=norm(S.gq).toLowerCase();
+  if(S.multi)g=g.filter(function(x){return x.reps.length>1});
+  if(q)g=g.filter(function(x){return norm(x.name).toLowerCase().indexOf(q)>-1||x.items.some(function(i){return i.hay.indexOf(q)>-1})});
+  var redM={};DATA.red.forEach(function(x){if(x[field])redM[x[field]]=(redM[x[field]]||0)+1});
+  var h='<div class="toolbar"><input type="search" id="gq" placeholder="ابحث باسم '+label+' أو العميل أو الجوال…" value="'+esc(S.gq)+'">'+
+        '<label><input type="checkbox" id="multi" '+(S.multi?'checked':'')+'> عند أكثر من مندوب فقط</label>'+
+        '<button class="btn sm" id="copyG">نسخ القائمة</button></div><div class="cnt">'+g.length+' '+label+' — اضغط على أي اسم لعرض كل مشاريعه</div>';
+  if(!g.length)return h+'<div class="empty">لا توجد نتائج</div>';
+  return h+g.map(function(x){
+    var key=field+'|'+x.name, open=S.open[key];
+    var rows=x.items.slice().sort(function(a,b){return (b.date||'')<(a.date||'')?-1:1}).map(function(i){
+      return '<tr class="row" data-id="'+esc(i.id)+'"><td>'+esc(i.date)+'</td><td>'+esc(i.rep)+'</td><td>'+esc(i.client)+'</td><td>'+esc(field==='consultant'?i.contractor:i.consultant)+'</td><td>'+esc(i.phone)+'</td><td>'+pill(i.status)+'</td><td class="n">'+esc(i.note||i.eng)+'</td></tr>'}).join('');
+    return '<div class="gcard '+(open?'open ':'')+(x.reps.length>1?'multi':'')+'" data-key="'+esc(key)+'"><div class="gh"><span class="nm">'+esc(x.name)+'</span>'+
+      '<span class="badge">'+x.items.length+' مشروع</span>'+
+      '<span class="chip">مناديب <b>'+x.reps.length+'</b></span>'+
+      '<span class="repsb">'+x.reps.map(function(r){return '<span class="chip">'+esc(r[0])+' <b>'+r[1]+'</b></span>'}).join('')+'</span>'+
+      (redM[x.name]?'<span class="chip" style="opacity:.7">أحمر خارج الحساب <b>'+redM[x.name]+'</b></span>':'')+'</div>'+
+      '<div class="gb"><div class="tw" style="max-height:none"><table class="mini"><thead><tr><th>التاريخ</th><th>المندوب</th><th>العميل</th><th>'+(field==='consultant'?'المقاول':'الاستشاري')+'</th><th>الجوال</th><th>الحالة</th><th>ملاحظات</th></tr></thead><tbody>'+rows+'</tbody></table></div></div></div>';
+  }).join('');
+}
+
+/* ---------- projects table ---------- */
+var COLS=[['date','التاريخ'],['rep','المندوب'],['client','العميل'],['consultant','الاستشاري'],['contractor','المقاول'],['phone','الجوال'],['status','الحالة'],['fs','المتابعة'],['note','الملاحظات']];
+function filtered(list){
+  var q=norm(S.q).toLowerCase();
+  var out=list.filter(function(x){
+    if(S.rep&&x.rep!==S.rep)return false;
+    if(S.status&&norm(x.status)!==norm(S.status))return false;
+    if(S.cons&&x.consultant!==S.cons)return false;
+    if(S.cont&&x.contractor!==S.cont)return false;
+    if(S.late&&x.fs!=='متأخرة')return false;
+    if(q&&x.hay.indexOf(q)<0)return false;
+    return true});
+  var k=S.sort;
+  out.sort(function(a,b){var A=a[k]||'',B=b[k]||'';return (A<B?-1:A>B?1:0)*S.dir});
+  return out;
+}
+function opts(field,sel){
+  var m={};DATA.active.concat(DATA.red).forEach(function(x){if(x[field])m[x[field]]=1});
+  return Object.keys(m).sort(function(a,b){return a.localeCompare(b,'ar')}).map(function(n){return '<option '+(n===sel?'selected':'')+'>'+esc(n)+'</option>'}).join('');
+}
+function table(list){
+  var th=COLS.map(function(c){return '<th data-s="'+c[0]+'">'+c[1]+(S.sort===c[0]?(S.dir>0?' ▲':' ▼'):'')+'</th>'}).join('');
+  var tr=list.map(function(x){
+    var fs=x.fs==='متأخرة'?'<span class="late">متأخرة</span>':x.fs==='في الموعد'?'<span class="ok">في الموعد</span>':x.fs==='بدون موعد'?'<span class="warn">بدون موعد</span>':'';
+    return '<tr class="row" data-id="'+esc(x.id)+'" data-red="'+(x.red?1:0)+'"><td>'+esc(x.date)+'</td><td>'+esc(x.rep)+'</td><td>'+esc(x.client)+(x.dup?' <span class="chip">مكرر؟</span>':'')+'</td><td>'+esc(x.consultant)+'</td><td>'+esc(x.contractor)+'</td><td style="white-space:nowrap">'+esc(x.phone)+'</td><td>'+pill(x.status)+'</td><td>'+fs+(x.followup?'<div style="font-size:12px;color:var(--mute)">'+esc(x.followup)+'</div>':'')+'</td><td class="n">'+esc(x.note||x.eng)+'</td></tr>'}).join('');
+  return '<div class="tw"><table><thead><tr>'+th+'</tr></thead><tbody>'+(tr||'<tr><td colspan="9" class="empty">لا توجد نتائج</td></tr>')+'</tbody></table></div>';
+}
+function viewProjects(isRed){
+  var base=isRed?DATA.red:DATA.active, list=filtered(base);
+  var chips=isRed?'':'<div class="chips">'+ST.map(function(s){return '<button class="'+s.c+' '+(norm(S.status)===norm(s.k)?'on':'')+'" data-st="'+s.k+'">'+s.label+'</button>'}).join('')+'</div>';
+  var h='<div class="toolbar"><input type="search" id="q" placeholder="ابحث: عميل، استشاري، مقاول، جوال، ملاحظة…" value="'+esc(S.q)+'">'+
+    '<select id="frep"><option value="">كل المناديب</option>'+reps().map(function(r){return '<option '+(r===S.rep?'selected':'')+'>'+esc(r)+'</option>'}).join('')+'</select>'+
+    '<select id="fcons"><option value="">كل الاستشاريين</option>'+opts('consultant',S.cons)+'</select>'+
+    '<select id="fcont"><option value="">كل المقاولين</option>'+opts('contractor',S.cont)+'</select>'+
+    (isRed?'':'<label><input type="checkbox" id="late" '+(S.late?'checked':'')+'> متأخرة فقط</label>')+
+    '<button class="btn sm" id="clear">مسح الفلاتر</button><button class="btn sm" id="copyP">نسخ الجدول</button></div>'+chips+
+    (isRed?'<div class="cnt">هذه المشاريع محفوظة للرجوع فقط ولا تدخل في أي عدّ أو مجموع.</div>':'')+
+    '<div class="cnt">عرض '+list.length+' من '+base.length+'</div>'+table(list);
+  return h;
+}
+
+/* ---------- reps ---------- */
+function viewReps(){
+  var R=reps();
+  return '<div class="grid2">'+R.map(function(r){
+    var L=DATA.active.filter(function(x){return x.rep===r}), red=DATA.red.filter(function(x){return x.rep===r}).length;
+    var chips=ST.map(function(s){var n=L.filter(function(x){return norm(x.status)===norm(s.k)}).length;return '<span class="pill '+s.c+'" style="margin:2px">'+s.label+' '+n+'</span>'}).join('');
+    var late=L.filter(function(x){return x.fs==='متأخرة'}).length;
+    var cons={};L.forEach(function(x){if(x.consultant)cons[x.consultant]=(cons[x.consultant]||0)+1});
+    var top=Object.keys(cons).sort(function(a,b){return cons[b]-cons[a]}).slice(0,5).map(function(n){return '<span class="chip">'+esc(n)+' <b>'+cons[n]+'</b></span>'}).join('');
+    return '<div class="card" style="cursor:pointer" data-rep="'+esc(r)+'"><h3>'+esc(r)+' <small>'+L.length+' مشروع نشط'+(red?' · '+red+' أحمر':'')+(late?' · <span class="late">'+late+' متأخرة</span>':'')+'</small></h3><div>'+chips+'</div>'+(top?'<div style="margin-top:10px;color:var(--mute);font-size:12px">أكثر الاستشاريين:</div>'+top:'')+'</div>';
+  }).join('')+'</div>';
+}
+
+/* ---------- detail modal ---------- */
+function showDetail(id,isRed){
+  var x=(isRed?DATA.red:DATA.active).filter(function(i){return String(i.id)===String(id)&&(!isRed||true)})[0]; if(!x)return;
+  var rows=[['الحالة',pill(x.status)],['التاريخ',esc(x.date)],['المندوب',esc(x.rep)],['الاستشاري',esc(x.consultant)],['المقاول',esc(x.contractor)],['الجوال',esc(x.phone)],['الفيلا / القطعة',esc(x.plot)],
+    ['الأهمية',esc(x.importance)],['ملاحظات المهندس',esc(x.eng)],['ملاحظات المندوب',esc(x.note)],['موعد المتابعة',esc(x.followup)+(x.fs?' — '+esc(x.fs):'')],
+    ['خصم المصعد',esc(x.discount)],['البراند',esc(x.brand)],['النظام',esc(x.system)],['تفاصيل إضافية',esc(x.extra)],['مصدر التصنيف',esc(x.basis)],['التاب الأصلي',esc(x.tab)]]
+    .filter(function(r){return r[1]});
+  document.getElementById('sheet').innerHTML='<div style="display:flex;justify-content:space-between;align-items:start;gap:10px"><div><h2>'+esc(x.client||'—')+'</h2><div style="color:var(--mute)">مشروع رقم '+esc(x.id)+'</div></div><button class="btn sm" id="closeM">إغلاق ✕</button></div><div class="kv">'+rows.map(function(r){return '<div>'+r[0]+'</div><div>'+r[1]+'</div>'}).join('')+'</div>';
+  document.getElementById('modal').classList.add('show');
+}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target.id==='modal'||e.target.id==='closeM')this.classList.remove('show')});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('modal').classList.remove('show')});
+
+/* ---------- copy ---------- */
+function copyText(t,btn){
+  var done=function(){var o=btn.textContent;btn.textContent='تم النسخ ✓';setTimeout(function(){btn.textContent=o},1500)};
+  var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity=0;document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');done()}catch(e){if(navigator.clipboard)navigator.clipboard.writeText(t).then(done)}
+  document.body.removeChild(ta);
+}
+function tsv(list){
+  var H=['التاريخ','المندوب','العميل','الاستشاري','المقاول','الجوال','الحالة','موعد المتابعة','الملاحظات'];
+  return [H.join('\t')].concat(list.map(function(x){return [x.date,x.rep,x.client,x.consultant,x.contractor,x.phone,x.status,x.followup,(x.note||x.eng).replace(/\s+/g,' ')].join('\t')})).join('\n');
+}
+
+/* ---------- render + events ---------- */
+function render(){
+  renderNav();
+  var el=document.getElementById('app'),h='';
+  if(S.tab==='overview')h=viewOverview();
+  else if(S.tab==='projects')h=viewProjects(false);
+  else if(S.tab==='cons')h=viewGroup('consultant','استشاري');
+  else if(S.tab==='cont')h=viewGroup('contractor','مقاول');
+  else if(S.tab==='reps')h=viewReps();
+  else if(S.tab==='red')h=viewProjects(true);
+  el.innerHTML=h;
+  var f=el.querySelector('#q,#gq'); if(f&&S._focus){f.focus();f.setSelectionRange(f.value.length,f.value.length);S._focus=false}
+}
+document.getElementById('app').addEventListener('click',function(e){
+  var t=e.target, k=t.closest('.kpi');
+  if(k){var a=k.dataset.a; if(a==='all')go('projects',{status:'',late:false,q:'',rep:'',cons:'',cont:''}); else if(a==='late')go('projects',{status:'متابعة',late:true}); else if(a==='red')go('red',{status:''}); else go('projects',{status:a.slice(3),late:false}); return}
+  var rr=t.closest('[data-rep]'); if(rr){go('projects',{rep:rr.dataset.rep,status:'',late:false});return}
+  var g=t.closest('[data-g]'); if(g){var f=g.dataset.g; S.open[(f==='cons'?'consultant':'contractor')+'|'+g.dataset.n]=true; S.gq=g.dataset.n; go(f);return}
+  var gh=t.closest('.gh'); if(gh){var c=gh.parentElement, key=c.dataset.key; S.open[key]=!S.open[key]; c.classList.toggle('open');return}
+  var row=t.closest('tr.row,.it[data-id]'); if(row&&row.dataset.id){showDetail(row.dataset.id,row.dataset.red==='1'||S.tab==='red');return}
+  var st=t.closest('[data-st]'); if(st){S.status=norm(S.status)===norm(st.dataset.st)?'':st.dataset.st;render();return}
+  var th=t.closest('th[data-s]'); if(th){var s=th.dataset.s;S.dir=S.sort===s?-S.dir:1;S.sort=s;render();return}
+  if(t.id==='clear'){S.q='';S.rep='';S.status='';S.cons='';S.cont='';S.late=false;render();return}
+  if(t.id==='copyP'){copyText(tsv(filtered(S.tab==='red'?DATA.red:DATA.active)),t);return}
+  if(t.id==='copyG'){var fld=S.tab==='cons'?'consultant':'contractor';copyText(group(fld).map(function(x){return x.name+'\t'+x.items.length+'\t'+x.reps.map(function(r){return r[0]+' '+r[1]}).join('، ')}).join('\n'),t);return}
+});
+document.getElementById('app').addEventListener('input',function(e){
+  var t=e.target;
+  if(t.id==='q'){S.q=t.value;S._focus=true;render()}
+  else if(t.id==='gq'){S.gq=t.value;S._focus=true;render()}
+});
+document.getElementById('app').addEventListener('change',function(e){
+  var t=e.target;
+  if(t.id==='frep')S.rep=t.value; else if(t.id==='fcons')S.cons=t.value; else if(t.id==='fcont')S.cont=t.value;
+  else if(t.id==='late')S.late=t.checked; else if(t.id==='multi')S.multi=t.checked; else return;
+  render();
+});
+
+/* ---------- data loading (live from the sheet) ---------- */
+function setLoading(b){document.getElementById('dot').className='dot'+(b?' load':'')}
+function onData(d){
+  DATA=d;prep();setLoading(false);
+  var t=(d.loadedAt||'').replace('T',' ').slice(0,16);
+  document.getElementById('upd').textContent='آخر تحديث للبيانات: '+t;
+  render();
+}
+function onFail(e){
+  setLoading(false);
+  document.getElementById('upd').textContent='تعذّر التحديث';
+  if(!DATA.active.length)document.getElementById('app').innerHTML='<div class="err">تعذّر تحميل البيانات من الشيت: '+esc(e&&e.message||e)+'</div>';
+}
+var PUB='https://docs.google.com/spreadsheets/d/e/2PACX-1vRowsEn77Z0UgoHk3RkYbsSNiJ5fWRn41SH5Sf08oEg_r_39mLcQkJSdafnItnkET1Dg7Y1UDloprlZ/pub';
+var GID_ACTIVE='818922864', GID_RED='1691286409', HEADER_ROW=3;
+var HEADERS={'م':'id','التاريخ':'date','المندوب':'rep','العميل':'client','الاستشاري':'consultant','المقاول':'contractor','الجوال':'phone','الحالة':'status','الأهمية':'importance','ملاحظات المهندس':'eng','ملاحظات المندوب':'note','موعد المتابعة':'followup','موقف المتابعة':'fstate','الفيلا / القطعة':'plot','خصم المصعد':'discount','البراند':'brand','النظام':'system','تفاصيل إضافية':'extra','تكرار':'dup','مصدر التصنيف':'basis','التاب الأصلي':'tab','الصف الأصلي':'src'};
+function parseCSV(t){
+  var rows=[],row=[],f='',q=false,i=0,c;
+  if(t.charCodeAt(0)===0xFEFF)t=t.slice(1);
+  for(;i<t.length;i++){c=t[i];
+    if(q){ if(c==='"'){ if(t[i+1]==='"'){f+='"';i++} else q=false } else f+=c }
+    else if(c==='"')q=true;
+    else if(c===','){row.push(f);f=''}
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&t[i+1]==='\n')i++; row.push(f);rows.push(row);row=[];f='' }
+    else f+=c;
+  }
+  if(f!==''||row.length){row.push(f);rows.push(row)}
+  return rows;
+}
+var MON={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+function normDate(v){
+  v=(v||'').trim(); if(!v)return '';
+  if(/^\d{4}-\d{2}-\d{2}/.test(v))return v.slice(0,10);
+  var m=v.match(/^(\d{1,2})[\/\-\s]([A-Za-z]{3,})[a-z]*[\/\-\s,]*(\d{4})$/);
+  if(m&&MON[m[2].slice(0,3).toLowerCase()])return m[3]+'-'+('0'+MON[m[2].slice(0,3).toLowerCase()]).slice(-2)+'-'+('0'+m[1]).slice(-2);
+  m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(m)return m[3]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[1]).slice(-2);
+  return v;
+}
+function tabFromCSV(text){
+  var rows=parseCSV(text); if(rows.length<=HEADER_ROW)return [];
+  var keys=rows[HEADER_ROW-1].map(function(h){return HEADERS[String(h).trim()]||null});
+  var out=[];
+  for(var r=HEADER_ROW;r<rows.length;r++){
+    var row=rows[r],o={},any=false;
+    for(var c=0;c<keys.length;c++){ if(!keys[c])continue; var v=String(row[c]==null?'':row[c]).trim();
+      if(keys[c]==='date'||keys[c]==='followup')v=normDate(v);
+      if(v&&keys[c]!=='fstate')any=true; o[keys[c]]=v; }
+    if(any&&(o.client||o.consultant||o.contractor))out.push(o);
+  }
+  return out;
+}
+function fetchTab(gid){
+  return fetch(PUB+'?gid='+gid+'&single=true&output=csv&_='+Date.now(),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(tabFromCSV);
+}
+function pad(n){return ('0'+n).slice(-2)}
+function load(){
+  setLoading(true);
+  Promise.all([fetchTab(GID_ACTIVE),fetchTab(GID_RED)]).then(function(a){
+    var d=new Date();
+    onData({active:a[0],red:a[1],loadedAt:d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':00'});
+  }).catch(onFail);
+}
+document.getElementById('refresh').addEventListener('click',load);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)load()});
+setInterval(load,5*60*1000);
+load();
+</script>
+</body>
+</html>
