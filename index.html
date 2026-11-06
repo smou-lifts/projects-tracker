@@ -104,6 +104,7 @@ td.n{max-width:300px;color:#cdd8ef;font-size:13px}
 .err{background:#4a1a1a;border:1px solid #a33;color:#ffd0d0;border-radius:12px;padding:14px 18px;margin:20px 0}
 footer{color:var(--mute);font-size:12px;text-align:center;margin-top:30px}
 @media print{header nav,.toolbar,.btn{display:none}body{background:#fff;color:#000}}
+.dl{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--mute)}.dl input{padding:6px 8px;border:1px solid #cfd6e4;border-radius:8px;font-family:inherit}
 </style>
 </head>
 <body>
@@ -136,7 +137,7 @@ var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){r
 var stInfo=function(s){var n=norm(s);for(var i=0;i<ST.length;i++)if(norm(ST[i].k)===n)return ST[i];return n==='احمر'?RED:{k:n,label:s||'—',c:'g',col:'#D9D9D9'}};
 var pill=function(s){var i=stInfo(s);return '<span class="pill '+i.c+'">'+esc(i.label)+'</span>'};
 
-var DATA={active:[],red:[]}, S={tab:'overview',q:'',rep:'',status:'',cons:'',cont:'',late:false,multi:false,sort:'date',dir:-1,gq:'',open:{}};
+var DATA={active:[],red:[]}, S={tab:'overview',q:'',rep:'',status:'',cons:'',cont:'',late:false,multi:false,sort:'date',dir:-1,gq:'',d1:'',d2:'',open:{}};
 var TODAY=new Date(); TODAY.setHours(0,0,0,0);
 
 function fstate(x){
@@ -243,6 +244,8 @@ function filtered(list){
     if(S.cons&&x.consultant!==S.cons)return false;
     if(S.cont&&x.contractor!==S.cont)return false;
     if(S.late&&x.fs!=='متأخرة')return false;
+    if(S.d1&&(!x.date||x.date<S.d1))return false;
+    if(S.d2&&(!x.date||x.date>S.d2))return false;
     if(q&&x.hay.indexOf(q)<0)return false;
     return true});
   var k=S.sort;
@@ -267,6 +270,7 @@ function viewProjects(isRed){
     '<select id="frep"><option value="">كل المناديب</option>'+reps().map(function(r){return '<option '+(r===S.rep?'selected':'')+'>'+esc(r)+'</option>'}).join('')+'</select>'+
     '<select id="fcons"><option value="">كل الاستشاريين</option>'+opts('consultant',S.cons)+'</select>'+
     '<select id="fcont"><option value="">كل المقاولين</option>'+opts('contractor',S.cont)+'</select>'+
+    '<label class="dl">من تاريخ <input type="date" id="d1" value="'+esc(S.d1)+'"></label><label class="dl">إلى <input type="date" id="d2" value="'+esc(S.d2)+'"></label>'+
     (isRed?'':'<label><input type="checkbox" id="late" '+(S.late?'checked':'')+'> متأخرة فقط</label>')+
     '<button class="btn sm" id="clear">مسح الفلاتر</button><button class="btn sm" id="copyP">نسخ الجدول</button></div>'+chips+
     (isRed?'<div class="cnt">هذه المشاريع محفوظة للرجوع فقط ولا تدخل في أي عدّ أو مجموع.</div>':'')+
@@ -334,7 +338,7 @@ document.getElementById('app').addEventListener('click',function(e){
   var row=t.closest('tr.row,.it[data-id]'); if(row&&row.dataset.id){showDetail(row.dataset.id,row.dataset.red==='1'||S.tab==='red');return}
   var st=t.closest('[data-st]'); if(st){S.status=norm(S.status)===norm(st.dataset.st)?'':st.dataset.st;render();return}
   var th=t.closest('th[data-s]'); if(th){var s=th.dataset.s;S.dir=S.sort===s?-S.dir:1;S.sort=s;render();return}
-  if(t.id==='clear'){S.q='';S.rep='';S.status='';S.cons='';S.cont='';S.late=false;render();return}
+  if(t.id==='clear'){S.q='';S.rep='';S.status='';S.cons='';S.cont='';S.late=false;S.d1='';S.d2='';render();return}
   if(t.id==='copyP'){copyText(tsv(filtered(S.tab==='red'?DATA.red:DATA.active)),t);return}
   if(t.id==='copyG'){var fld=S.tab==='cons'?'consultant':'contractor';copyText(group(fld).map(function(x){return x.name+'\t'+x.items.length+'\t'+x.reps.map(function(r){return r[0]+' '+r[1]}).join('، ')}).join('\n'),t);return}
 });
@@ -346,6 +350,7 @@ document.getElementById('app').addEventListener('input',function(e){
 document.getElementById('app').addEventListener('change',function(e){
   var t=e.target;
   if(t.id==='frep')S.rep=t.value; else if(t.id==='fcons')S.cons=t.value; else if(t.id==='fcont')S.cont=t.value;
+  else if(t.id==='d1')S.d1=t.value; else if(t.id==='d2')S.d2=t.value;
   else if(t.id==='late')S.late=t.checked; else if(t.id==='multi')S.multi=t.checked; else return;
   render();
 });
