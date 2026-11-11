@@ -10,7 +10,7 @@
 :root{
   --navy:#0B2147; --navy2:#16346B; --navy3:#1d4488; --line:#2a4a85;
   --gold:#E0A800; --gold2:#C99700; --ink:#E8EDF7; --mute:#9FB1D3;
-  --y:#FFE680; --o:#F8B26A; --b:#B7E1F7; --g:#D9D9D9; --r:#F4B0B0;
+  --y:#FFE680; --o:#F8B26A; --b:#B5E0A8; --g:#D9D9D9; --r:#F4B0B0;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--navy);color:var(--ink);font-family:'Cairo',Tahoma,Arial,sans-serif;font-size:15px}
@@ -128,7 +128,7 @@ footer{color:var(--mute);font-size:12px;text-align:center;margin-top:30px}
 var ST=[
  {k:'مهم جدا',label:'مهم جدًا',c:'o',col:'#F8B26A'},
  {k:'متابعة',label:'متابعة',c:'y',col:'#FFE680'},
- {k:'سماوي',label:'سماوي',c:'b',col:'#B7E1F7'},
+ {k:'تعاقد',label:'تعاقد',c:'b',col:'#B5E0A8'},
  {k:'غير معروف',label:'غير معروف',c:'g',col:'#D9D9D9'}
 ];
 var RED={k:'احمر',label:'أحمر',c:'r',col:'#F4B0B0'};
@@ -296,7 +296,7 @@ function showDetail(id,isRed){
   var x=(isRed?DATA.red:DATA.active).filter(function(i){return String(i.id)===String(id)&&(!isRed||true)})[0]; if(!x)return;
   var rows=[['الحالة',pill(x.status)],['التاريخ',esc(x.date)],['المندوب',esc(x.rep)],['الاستشاري',esc(x.consultant)],['المقاول',esc(x.contractor)],['الجوال',esc(x.phone)],['الفيلا / القطعة',esc(x.plot)],
     ['الأهمية',esc(x.importance)],['ملاحظات المهندس',esc(x.eng)],['ملاحظات المندوب',esc(x.note)],['موعد المتابعة',esc(x.followup)+(x.fs?' — '+esc(x.fs):'')],
-    ['خصم المصعد',esc(x.discount)],['البراند',esc(x.brand)],['النظام',esc(x.system)],['تفاصيل إضافية',esc(x.extra)],['مصدر التصنيف',esc(x.basis)],['التاب الأصلي',esc(x.tab)]]
+    ['خصم التكييف',esc(x.discount)],['البراند',esc(x.brand)],['النظام',esc(x.system)],['تفاصيل إضافية',esc(x.extra)],['مصدر التصنيف',esc(x.basis)],['التاب الأصلي',esc(x.tab)]]
     .filter(function(r){return r[1]});
   document.getElementById('sheet').innerHTML='<div style="display:flex;justify-content:space-between;align-items:start;gap:10px"><div><h2>'+esc(x.client||'—')+'</h2><div style="color:var(--mute)">مشروع رقم '+esc(x.id)+'</div></div><button class="btn sm" id="closeM">إغلاق ✕</button></div><div class="kv">'+rows.map(function(r){return '<div>'+r[0]+'</div><div>'+r[1]+'</div>'}).join('')+'</div>';
   document.getElementById('modal').classList.add('show');
@@ -370,7 +370,7 @@ function onFail(e){
 }
 var PUB='https://docs.google.com/spreadsheets/d/e/2PACX-1vRowsEn77Z0UgoHk3RkYbsSNiJ5fWRn41SH5Sf08oEg_r_39mLcQkJSdafnItnkET1Dg7Y1UDloprlZ/pub';
 var GID_ACTIVE='818922864', GID_RED='1691286409', HEADER_ROW=3;
-var HEADERS={'م':'id','التاريخ':'date','المندوب':'rep','العميل':'client','الاستشاري':'consultant','المقاول':'contractor','الجوال':'phone','الحالة':'status','الأهمية':'importance','ملاحظات المهندس':'eng','ملاحظات المندوب':'note','موعد المتابعة':'followup','موقف المتابعة':'fstate','الفيلا / القطعة':'plot','خصم المصعد':'discount','البراند':'brand','النظام':'system','تفاصيل إضافية':'extra','تكرار':'dup','مصدر التصنيف':'basis','التاب الأصلي':'tab','الصف الأصلي':'src'};
+var HEADERS={'م':'id','التاريخ':'date','المندوب':'rep','العميل':'client','الاستشاري':'consultant','المقاول':'contractor','الجوال':'phone','الحالة':'status','الأهمية':'importance','ملاحظات المهندس':'eng','ملاحظات المندوب':'note','موعد المتابعة':'followup','موقف المتابعة':'fstate','الفيلا / القطعة':'plot','خصم المصعد':'discount','خصم التكييف':'discount','البراند':'brand','النظام':'system','تفاصيل إضافية':'extra','تكرار':'dup','مصدر التصنيف':'basis','التاب الأصلي':'tab','الصف الأصلي':'src'};
 function parseCSV(t){
   var rows=[],row=[],f='',q=false,i=0,c;
   if(t.charCodeAt(0)===0xFEFF)t=t.slice(1);
@@ -416,7 +416,12 @@ function load(){
   setLoading(true);
   Promise.all([fetchTab(GID_ACTIVE),fetchTab(GID_RED)]).then(function(a){
     var d=new Date();
-    onData({active:a[0],red:a[1],loadedAt:d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':00'});
+    var REPPH={'0581271489':1,'0549919675':1};
+    function ph(x){var n=String(x.phone||'').replace(/\D/g,'');if(n.indexOf('00971')===0)n='0'+n.slice(5);else if(n.indexOf('971')===0)n='0'+n.slice(3);if(REPPH[n])x.phone='';return x}
+    var isRed=function(x){return norm(x.status)==='احمر'};
+    var act=a[0].map(ph).filter(function(x){return !isRed(x)});
+    var rd=a[1].map(ph).concat(a[0].filter(isRed));
+    onData({active:act,red:rd,loadedAt:d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':00'});
   }).catch(onFail);
 }
 document.getElementById('refresh').addEventListener('click',load);
