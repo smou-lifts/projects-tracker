@@ -2,6 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>سمو جروب | متابعة المشاريع</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -138,7 +141,10 @@ var stInfo=function(s){var n=norm(s);for(var i=0;i<ST.length;i++)if(norm(ST[i].k
 var pill=function(s){var i=stInfo(s);return '<span class="pill '+i.c+'">'+esc(i.label)+'</span>'};
 
 var DATA={active:[],red:[]}, S={tab:'overview',q:'',rep:'',status:'',cons:'',cont:'',late:false,multi:false,sort:'date',dir:-1,gq:'',d1:'',d2:'',open:{}};
-var TODAY=new Date(); TODAY.setHours(0,0,0,0);
+var BUILD='2026-11-18-a';
+function dubaiNow(){var p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dubai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});return p}
+var _dn=dubaiNow(); var TODAY=new Date(+_dn.year,+_dn.month-1,+_dn.day,0,0,0,0);
+function cmpAr(a,b){a=String(a);b=String(b);return a<b?-1:a>b?1:0}
 
 function fstate(x){
   if(norm(x.status)!=='متابعة') return '';
@@ -209,7 +215,7 @@ function group(field){
   var m={};
   DATA.active.forEach(function(x){var n=x[field];if(!n)return;(m[n]=m[n]||{name:n,items:[],rc:{},st:{}}).items.push(x);var g=m[n];g.rc[x.rep]=(g.rc[x.rep]||0)+1});
   var arr=Object.keys(m).map(function(n){var g=m[n];g.reps=Object.keys(g.rc).map(function(r){return [r,g.rc[r]]}).sort(function(a,b){return b[1]-a[1]});return g});
-  arr.sort(function(a,b){return b.reps.length-a.reps.length||b.items.length-a.items.length||a.name.localeCompare(b.name,'ar')});
+  arr.sort(function(a,b){return b.reps.length-a.reps.length||b.items.length-a.items.length||cmpAr(a.name,b.name)});
   return arr;
 }
 function viewGroup(field,label){
@@ -254,7 +260,7 @@ function filtered(list){
 }
 function opts(field,sel){
   var m={};DATA.active.concat(DATA.red).forEach(function(x){if(x[field])m[x[field]]=1});
-  return Object.keys(m).sort(function(a,b){return a.localeCompare(b,'ar')}).map(function(n){return '<option '+(n===sel?'selected':'')+'>'+esc(n)+'</option>'}).join('');
+  return Object.keys(m).sort(function(a,b){return cmpAr(a,b)}).map(function(n){return '<option '+(n===sel?'selected':'')+'>'+esc(n)+'</option>'}).join('');
 }
 function table(list){
   var th=COLS.map(function(c){return '<th data-s="'+c[0]+'">'+c[1]+(S.sort===c[0]?(S.dir>0?' ▲':' ▼'):'')+'</th>'}).join('');
@@ -360,7 +366,7 @@ function setLoading(b){document.getElementById('dot').className='dot'+(b?' load'
 function onData(d){
   DATA=d;prep();setLoading(false);
   var t=(d.loadedAt||'').replace('T',' ').slice(0,16);
-  document.getElementById('upd').textContent='آخر تحديث للبيانات: '+t;
+  document.getElementById('upd').textContent='آخر تحديث للبيانات: '+t+' (توقيت أبوظبي) · بصمة '+(d.fp||'')+' · '+BUILD;
   render();
 }
 function onFail(e){
@@ -407,21 +413,38 @@ function tabFromCSV(text){
   }
   return out;
 }
-function fetchTab(gid){
-  return fetch(PUB+'?gid='+gid+'&single=true&output=csv&_='+Date.now(),{cache:'no-store'})
-    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()}).then(tabFromCSV);
+function hash6(t){var x=5381;for(var i=0;i<t.length;i++)x=((x<<5)+x+t.charCodeAt(i))|0;return ('000000'+(x>>>0).toString(36)).slice(-6)}
+function fetchText(gid,tries){
+  tries=tries||0;
+  return fetch(PUB+'?gid='+gid+'&single=true&output=csv&_='+Date.now()+Math.random().toString(36).slice(2,6),{cache:'no-store',credentials:'omit'})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})
+    .then(function(t){if(t.length<50||/<html/i.test(t.slice(0,200)))throw new Error('bad csv');return t})
+    .catch(function(e){if(tries<2)return new Promise(function(ok){setTimeout(ok,800*(tries+1))}).then(function(){return fetchText(gid,tries+1)});throw e});
 }
 function pad(n){return ('0'+n).slice(-2)}
+function checkBuild(){
+  return fetch(location.pathname+'?chk='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){
+    var m=t.match(/var BUILD='([^']+)'/);
+    if(m&&m[1]!==BUILD){location.replace(location.pathname+'?b='+encodeURIComponent(m[1])+'&t='+Date.now());return true}
+    return false;
+  }).catch(function(){return false});
+}
 function load(){
   setLoading(true);
-  Promise.all([fetchTab(GID_ACTIVE),fetchTab(GID_RED)]).then(function(a){
-    var d=new Date();
-    var REPPH={'0581271489':1,'0549919675':1};
-    function ph(x){var n=String(x.phone||'').replace(/\D/g,'');if(n.indexOf('00971')===0)n='0'+n.slice(5);else if(n.indexOf('971')===0)n='0'+n.slice(3);if(REPPH[n])x.phone='';return x}
-    var isRed=function(x){return norm(x.status)==='احمر'};
-    var act=a[0].map(ph).filter(function(x){return !isRed(x)});
-    var rd=a[1].map(ph).concat(a[0].filter(isRed));
-    onData({active:act,red:rd,loadedAt:d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':00'});
+  checkBuild().then(function(reloading){
+    if(reloading)return;
+    return Promise.all([fetchText(GID_ACTIVE),fetchText(GID_RED)]).then(function(tx){
+      var a=[tabFromCSV(tx[0]),tabFromCSV(tx[1])];
+      var fp=hash6(tx[0]+'|'+tx[1]);
+      var n=dubaiNow();
+      var REPPH={'0581271489':1,'0549919675':1};
+      function ph(x){var n=String(x.phone||'').replace(/\D/g,'');if(n.indexOf('00971')===0)n='0'+n.slice(5);else if(n.indexOf('971')===0)n='0'+n.slice(3);if(REPPH[n])x.phone='';return x}
+      var isRed=function(x){return norm(x.status)==='احمر'};
+      var act=a[0].map(ph).filter(function(x){return !isRed(x)});
+      var rd=a[1].map(ph).concat(a[0].filter(isRed));
+      var dn=dubaiNow(); TODAY=new Date(+dn.year,+dn.month-1,+dn.day,0,0,0,0);
+      onData({active:act,red:rd,fp:fp,loadedAt:dn.year+'-'+dn.month+'-'+dn.day+'T'+dn.hour+':'+dn.minute+':00'});
+    });
   }).catch(onFail);
 }
 document.getElementById('refresh').addEventListener('click',load);
